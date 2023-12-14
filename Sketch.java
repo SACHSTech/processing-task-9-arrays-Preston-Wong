@@ -41,9 +41,9 @@ public class Sketch extends PApplet {
       fill(255);
       rect(rectintX,rectintY,100, -100);
 
-      if (MoveRight == true || LeftPressed == true) {
+      if (MoveRight == true || RightPressed == true) {
         rectintX += 10;
-      } if (MoveLeft == true || RightPressed == true) {
+      } if (MoveLeft == true || LeftPressed == true) {
         rectintX -= 10;
       }
 
@@ -92,23 +92,24 @@ public class Sketch extends PApplet {
         MoveRight = true;
       } if (key == 'a' || key == 'A') {
         MoveLeft = true;
-      }
-    }
-  }
-
-  public void keyCode() {
-      if (keyCode == LEFT) {
+      } if (keyCode == LEFT) {
         LeftPressed = true;
       } if (keyCode == RIGHT) {
         RightPressed = true;
       }
-    
+    }
   }
 
   public void keyReleased() {
-    if (!keyPressed) {
-      MoveRight = false;
-      MoveLeft = false;
-    }
+      if (key == 'd' || key =='D') {
+        MoveRight = false;
+      } if (key == 'a' || key == 'A') {
+        MoveLeft = false;
+      } if (keyCode == LEFT) {
+        LeftPressed = false;
+      } if (keyCode == RIGHT) {
+        RightPressed = false;
+      }
+     
   }
 }
