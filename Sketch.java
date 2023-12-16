@@ -2,19 +2,24 @@ import processing.core.PApplet;
 
 public class Sketch extends PApplet {
 	
-  // arrays for the lcation for each snow flake and their visibility 
+  // arrays for the location for each snow flake and their visibility 
   float [] floatSnowY = {-400, -325, -300, -275, -220, -50, -200, -125, -250, -150, -250, -150, -350, -50, -350, -315, -255, -375, -175, 0};
-	float [] floatSnowX = {50, 100, 150, 250, 300, 350, 400, 450, 500, 550, 10, 350, 109, 215, 267, 390, 256, 500, 541, 600};
+	float [] floatSnowX = {50, 100, 150, 250, 275, 350, 50, 220, 300, 350, 10, 250, 109, 215, 267, 320, 256, 200, 241, 375};
   boolean [] hideSnowFlakeStatus = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 
-  // boolean values to see if a snow flack has been clicked or if the blue circle is being moved 
+  // boolean values to see if a snow flack has been clicked, if the blue circle is being moved, or for the speed at which the snowflakes fall at  
   boolean blnHit = false;
-  boolean MoveRight = false;
-  boolean MoveLeft = false;
+  boolean blnMoveRight = false;
+  boolean blnMoveLeft = false;
+  boolean blnFallSlower = false;
+  boolean blnFallFaster = false;
   
-  // radius checks for both circle to circle collision and clicking 
+  // sets the max distance away that you can be hit, or that you can click a snowflake 
   double dblClickingRadius = 20;
   double dblRadius = 24;
+
+  // variable that contorls how fast the snowflakes fall 
+  int intSpeed = 3;
 
   // locations of the circle 
   int intCircleSize = 30;
@@ -29,8 +34,9 @@ public class Sketch extends PApplet {
    * Called once at the beginning of execution, put your size all in this method
    */
   public void settings() {
+
 	  // put your size call here
-    size(600, 550);
+    size(400, 550);
 
   }
 
@@ -40,7 +46,8 @@ public class Sketch extends PApplet {
    */
   public void setup() {
 
-      background(0);
+    // sets the background to black before starting the game 
+    background(0);
     
   }
 
@@ -54,7 +61,7 @@ public class Sketch extends PApplet {
 
       background(0);
 
-      // chekcs the hp of the player left and prints out the needed hearts
+      // chekcs the hp of the player left and prints out the needed squares
       if (intHealth == 3) {
 
         fill(255,0,0);
@@ -89,11 +96,39 @@ public class Sketch extends PApplet {
 
         // checks the visibility of the snow flake before loading it 
         if (hideSnowFlakeStatus[i] == false) {
-      
+
+          // sets the background black
           fill(255);
-        
+
+          // draws the snowflakes 
           ellipse(floatSnowX[i],floatSnowY[i],intCircleSize,intCircleSize);
-          floatSnowY[i] += 3;
+          floatSnowY[i] += intSpeed;
+
+          // draws the player blue circle 
+          fill(0,0,255);
+          ellipse(intCircleX, intCircleY, intCircleSize, intCircleSize);
+
+          // adjusts how fast the snowflakes fall 
+          if (blnFallFaster == true) {
+
+            intSpeed += 1;
+
+          } else if (blnFallSlower == true) {
+            
+            intSpeed -= 1;
+
+          }
+
+          // sets limits to how slow or how fast the snowflakes can move 
+          if (intSpeed < 1) {
+
+            intSpeed = 1;
+
+          } else if (intSpeed > 10) {
+
+            intSpeed = 10;
+
+          }
         
           // sends the snowflake back to the top once it reaches the bottom of the canvas
           if (floatSnowY[i] > height) {
@@ -110,15 +145,12 @@ public class Sketch extends PApplet {
 
         }
 
-        fill(0,0,255);
-        ellipse(intCircleX,intCircleY,intCircleSize, intCircleSize);
-
         // adjusts the location of the player circle 
-        if (MoveRight == true) {
+        if (blnMoveRight == true) {
 
           intCircleX = intCircleX + 1;
 
-        } if (MoveLeft == true) {
+        } if (blnMoveLeft == true) {
 
           intCircleX = intCircleX - 1;
 
@@ -135,17 +167,15 @@ public class Sketch extends PApplet {
 
         } 
       }
-
     } else {
 
       // sets the background white and prints ggs once the player has no more lives left 
       background(255);
       fill(0);
-      text("Good Game", height / 2, width / 2);
+      text("Good Game", width / 2, height / 2);
 
     }
   }
-  
 
   public void mousePressed() {
     
@@ -153,7 +183,7 @@ public class Sketch extends PApplet {
     for (int i = 0; i < 20; i++) {
       
       // determines if the location of the moues is touching any snowflake 
-      if (dist((float) mouseX, (float) mouseY,floatSnowX[i],floatSnowY[i]) < dblClickingRadius) {
+      if (dist((float) mouseX, (float) mouseY, floatSnowX[i], floatSnowY[i]) < dblClickingRadius) {
 
         // if the moues is touching a snow flake, then it will change the visiblity of that snowflake 
         blnHit = true;
@@ -168,46 +198,62 @@ public class Sketch extends PApplet {
     // first checks if any keys are pressed 
     if (keyPressed) {
 
-      // determines if the key is one of the following and will move the circle accordingly 
+      // determines if one of the following keys are pressed and will turn that boolean value to true 
       if (key == 'd' || key =='D') {
 
-        MoveRight = true;
+        blnMoveRight = true;
 
       } if (key == 'a' || key == 'A') {
 
-        MoveLeft = true;
+        blnMoveLeft = true;
 
       } if (keyCode == LEFT) {
 
-        MoveLeft = true;
+        blnMoveLeft = true;
 
       } if (keyCode == RIGHT) {
 
-        MoveRight = true;
+        blnMoveRight = true;
+ 
+      } if (keyCode == UP) {
+        
+        blnFallSlower = true;
+
+      } if (keyCode == DOWN) {
+
+        blnFallFaster = true;
 
       }
     }
   }
 
-  // makes sure that once the key is released, that the player circle does not continue to move left or right 
+  // makes sure that once the key is released, that the boolean is turned to false and does not remain true 
   public void keyReleased() {
  
     if (key == 'd' || key =='D') {
 
-      MoveRight = false;
+      blnMoveRight = false;
 
     } if (key == 'a' || key == 'A') {
 
-      MoveLeft = false;
+      blnMoveLeft = false;
 
     } if (keyCode == LEFT) {
 
-      MoveLeft = false;
+      blnMoveLeft = false;
 
     } if (keyCode == RIGHT) {
 
-      MoveRight = false;
+      blnMoveRight = false;
       
+    } if (keyCode == UP) {
+        
+      blnFallSlower = false;
+
+    } if (keyCode == DOWN) {
+
+      blnFallFaster = false;
+
     }
   }
 }
