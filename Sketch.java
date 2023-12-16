@@ -1,11 +1,17 @@
 import processing.core.PApplet;
 
+/**
+ * To run a snowflake game where the player must dodge all the snows flakes, the player can click a snowflake to make it dissapear 
+ * @author Preston Wong
+ * 
+ */
+
 public class Sketch extends PApplet {
 	
   // arrays for the location for each snow flake and their visibility 
   float [] floatSnowY = {-400, -325, -300, -275, -220, -50, -200, -125, -250, -150, -250, -150, -350, -50, -350, -315, -255, -375, -175, 0};
 	float [] floatSnowX = {50, 100, 150, 250, 275, 350, 50, 220, 300, 350, 10, 250, 109, 215, 267, 320, 256, 200, 241, 375};
-  boolean [] hideSnowFlakeStatus = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
+  boolean [] blnHideSnowFlakeStatus = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 
   // boolean values to see if a snow flack has been clicked, if the blue circle is being moved, or for the speed at which the snowflakes fall at  
   boolean blnHit = false;
@@ -95,7 +101,7 @@ public class Sketch extends PApplet {
         }
 
         // checks the visibility of the snow flake before loading it 
-        if (hideSnowFlakeStatus[i] == false) {
+        if (blnHideSnowFlakeStatus[i] == false) {
 
           // sets the background black
           fill(255);
@@ -141,7 +147,7 @@ public class Sketch extends PApplet {
         // uses this to set the visibility of the snowflake to invisible if the user has clicked it with their moues 
         if (blnHit == true) {
 
-          hideSnowFlakeStatus[intLocation] = true;
+          blnHideSnowFlakeStatus[intLocation] = true;
 
         }
 
@@ -177,6 +183,9 @@ public class Sketch extends PApplet {
     }
   }
 
+  /**
+   * sees if the mouse button has been pressed down and it then checks to see if the location of the cursor is over a snowflake 
+   */
   public void mousePressed() {
     
     // makes this method is looking at the same set of information in the array as the draw method 
@@ -193,6 +202,9 @@ public class Sketch extends PApplet {
     }
   }
 
+  /**
+   * checks to see if keyboard keys have been pressed, and there have been, it checks to see if certain ones have been pressed and changes the corresponding boolean value to ture 
+   */
   public void keyPressed() {
 
     // first checks if any keys are pressed 
@@ -227,7 +239,9 @@ public class Sketch extends PApplet {
     }
   }
 
-  // makes sure that once the key is released, that the boolean is turned to false and does not remain true 
+  /**
+   * sees if a keyboard key has been released, it then sees which one has been released and then changes that corresponding boolean value to false 
+   */
   public void keyReleased() {
  
     if (key == 'd' || key =='D') {
